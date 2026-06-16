@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Iterable
 from openai import OpenAI
 from .models import ConfigModel
 
@@ -7,8 +6,8 @@ class AiClient(ABC):
     """Abstract base class for AI service providers."""
     
     @abstractmethod
-    def send_message(self, prompt: str) -> Iterable[str]:
-        """Stream chat completion chunks as strings."""
+    def send_message(self, prompt: str) -> str:
+        """Send a message and return the response string."""
         pass
 
 class OpenAiClient(AiClient):
@@ -21,16 +20,13 @@ class OpenAiClient(AiClient):
             base_url=config.base_url
         )
 
-    def send_message(self, prompt: str) -> Iterable[str]:
-        stream = self.client.chat.completions.create(
+    def send_message(self, prompt: str) -> str:
+        response = self.client.chat.completions.create(
             model=self.config.default_model,
             messages=[{"role": "user", "content": prompt}],
-            stream=True
+            stream=False
         )
-        
-        for chunk in stream:
-            if chunk.choices and chunk.choices[0].delta.content:
-                yield chunk.choices[0].delta.content
+        return response.choices[0].message.content or ""
 
 class FakeAiClient(AiClient):
     """A fake client for testing purposes."""
@@ -39,6 +35,6 @@ class FakeAiClient(AiClient):
         self.response = response
         self.last_prompt = None
 
-    def send_message(self, prompt: str) -> Iterable[str]:
+    def send_message(self, prompt: str) -> str:
         self.last_prompt = prompt
-        yield self.response
+        return self.response
