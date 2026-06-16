@@ -1,0 +1,47 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/debian
+{
+	"name": "Debian",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "."
+	},
+	// https://containers.dev/features
+	"features": {
+		// https://github.com/devcontainers/features/tree/main/src/python
+		"ghcr.io/devcontainers/features/python:1": {
+			"version": "latest"
+		},
+		// https://github.com/devcontainer-community/devcontainer-features/tree/main/src/astral.sh-uv
+		"ghcr.io/devcontainer-community/devcontainer-features/astral.sh-uv:1": {
+			"version": "latest"
+		},
+		// https://github.com/devcontainer-community/devcontainer-features/tree/main/src/opencode.ai
+		"ghcr.io/devcontainer-community/devcontainer-features/opencode.ai:1":
+		{
+			"version": "latest"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"s-hiraoku.vscode-sidebar-terminal",
+				"ms-python.black-formatter"
+			]
+		}
+	},
+	"mounts": [
+		{
+			"source": "${localEnv:HOME}${localEnv:USERPROFILE}/.local/share/opencode/auth.json",
+			"target": "/home/vscode/.local/share/opencode/auth.json",
+			"type": "bind"
+		},
+			{
+			"source": "${localEnv:HOME}${localEnv:USERPROFILE}/.config/opencode",
+			"target": "/home/vscode/.config/opencode",
+			"type": "bind"
+		}
+	],
+	"remoteUser": "vscode",
+	"containerUser": "vscode"
+}
