@@ -20,10 +20,8 @@
     - Non-interactive mode optimized for shell piping and scripting.
 
 ## 4. Data Models (The "Spec")
-The tool's behavior is driven by Pydantic models:
-- **`ConfigModel`**: Validates `api_key`, `base_url`, and `default_model`.
-- **`Message`**: Strict role/content structure for chat history.
-- **`ChatCompletionSpec`**: Defines parameters like `temperature`, `max_tokens`, and `stop_sequences`.
+The tool's behavior is driven by simple data structures.
+
 
 ## 5. Command Classes
 The core logic is encapsulated in command classes:
@@ -36,5 +34,4 @@ The core logic is encapsulated in command classes:
 - **Runtime**: Python 3.14+
 - **CLI Framework**: `Typer` (for type-safe command handling).
 - **API Client**: `openai` (for standard protocol compatibility).
-- **Validation**: `Pydantic` & `pydantic-settings`.
-- **Formatting**: `Rich` (for Markdown rendering and progress spinners).
+- **Formatting**: `rich` (for Markdown rendering and progress spinners).
