@@ -1,5 +1,13 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from openai import OpenAI
+
+
+@dataclass
+class OpenAiClientConfig:
+    api_key: str
+    endpoint: str
+    model: str
 
 
 class AiClient(ABC):
@@ -13,18 +21,11 @@ class AiClient(ABC):
 class OpenAiClient(AiClient):
     """OpenAI-compatible client implementation."""
     
-    def __init__(
-        self, 
-        api_key: str, 
-        base_url: str, 
-        default_model: str
-    ):
-        self.api_key = api_key
-        self.base_url = base_url
-        self.default_model = default_model
+    def __init__(self, config: OpenAiClientConfig):
+        self.config = config
         self.client = OpenAI(
-            api_key=api_key,
-            base_url=base_url
+            api_key=config.api_key,
+            base_url=config.endpoint
         )
 
     def send_response(self, model: str, prompt: str) -> str:
@@ -34,6 +35,7 @@ class OpenAiClient(AiClient):
             stream=False
         )
         return response.choices[0].message.content or ""
+
 
 class FakeAiClient(AiClient):
     """A fake client for testing purposes."""

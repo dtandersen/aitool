@@ -1,4 +1,4 @@
-from ..client import AiClient
+from aitool.client import AiClient
 
 
 class ChatCommand:

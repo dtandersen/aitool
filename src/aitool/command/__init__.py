@@ -1,3 +1,3 @@
-from .chat import ChatCommand
+from aitool.command.chat import ChatCommand
 
 __all__ = ["ChatCommand"]
