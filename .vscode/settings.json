@@ -6,11 +6,11 @@
         "https://models.dev":true
     },
     "files.watcherExclude": {
-        "**/node_modules/*": true,
-        "**/.git/*": true,
-        "**/dist/*": true,
-        "**/build/*": true,
-        "**/.venv/*": true,
+        "**/node_modules/**": true,
+        "**/.git/**": true,
+        "**/dist/**": true,
+        "**/build/**": true,
+        "**/.venv/**": true,
     },
     "search.exclude": {
         "**/node_modules": true,
