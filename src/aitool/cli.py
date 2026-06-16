@@ -6,11 +6,11 @@ from aitool.command import ChatCommand
 from aitool.client import OpenAiClient, OpenAiClientConfig
 
 load_dotenv()
-app = typer.Typer(no_args_is_help=True, rich_markup_mode=None)
+app = typer.Typer(no_args_is_help=False, rich_markup_mode=None)
 console = Console()
 
 
-@app.callback()
+@app.callback(invoke_without_command=True)
 def callback(ctx: typer.Context):
     """
     aitool - AI CLI utility
@@ -18,15 +18,25 @@ def callback(ctx: typer.Context):
     config = OpenAiClientConfig(
         api_key=os.getenv("AITOOL_API_KEY", "ollama"),
         endpoint=os.getenv("AITOOL_ENDPOINT", "http://localhost:11434/v1"),
-        model=os.getenv("AITOOL_MODEL", "llama3")
+        model=os.getenv("AITOOL_MODEL", "llama3"),
     )
     ctx.obj = OpenAiClient(config=config)
 
+    if ctx.invoked_subcommand is None:
+        client = ctx.obj
+        command = ChatCommand(client=client)
+        console.print(
+            "[bold blue]Interactive Chat Started[/bold blue] (Press Ctrl+C to exit)"
+        )
 
-@app.command()
-def chat(ctx: typer.Context, message: str):
-    """Send a message and print the response."""
-    client = ctx.obj
-    command = ChatCommand(client=client)
-    response = command.execute(model=client.config.model, prompt=message)
-    console.print(response)
+        while True:
+            try:
+                user_input = typer.prompt("You", prompt_suffix=" > ")
+
+                response = command.execute(model=client.config.model, prompt=user_input)
+                console.print(f"[bold green]AI:[/bold green] {response}")
+
+            except (typer.Abort, KeyboardInterrupt):
+                break
+        
+        console.print("\n[yellow]Goodbye![/yellow]")
