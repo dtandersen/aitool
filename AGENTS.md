@@ -9,3 +9,13 @@
 - Source: `src/`
 - Tests: `tests/`
 
+## Application Summary
+- **Type**: AI CLI Utility (`aitool`).
+- **Core Stack**: Python 3.14+, `uv` (package manager), `typer` (CLI), `rich` (formatting), `openai` (client).
+- **Architecture**:
+  - `src/aitool/cli.py`: Main entry point. Uses a `typer.callback` to start an interactive chat loop by default.
+  - `src/aitool/client.py`: Abstract `AiClient` with `OpenAiClient` and `FakeAiClient` (for testing) implementations.
+  - `src/aitool/command/`: Logic for specific actions (e.g., `ChatCommand`).
+- **Configuration**: Uses `.env` via `python-dotenv`. Defaults to Ollama (`localhost:11434`) but supports OpenAI-compatible endpoints.
+- **Workflow**: `aitool` starts an interactive session immediately. Users exit via `Ctrl+C`.
+
